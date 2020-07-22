@@ -43,9 +43,8 @@ def test_nc_output_valid_dir(tmpdir):
 
 
 def test_nc_output_invalid_dir(tmpdir):
-    dataset = Nwis().get_data(site='03339000', start_date='2020-01-01', end_date='2020-01-01',
-                              nc_output=tmpdir)
+    with pytest.raises(ValueError):
+        Nwis().get_data(site='03339000', start_date='2020-01-01', end_date='2020-01-01',
+                        nc_output=os.path.join(tmpdir, 'error'))
 
-    assert isinstance(dataset, xarray.core.dataset.Dataset)
-    assert len(os.listdir(tmpdir)) == 0
 

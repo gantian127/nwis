@@ -54,11 +54,11 @@ def test_date_option(tmpdir):
 def test_data_type_option(tmpdir):
     runner = CliRunner()
     with tmpdir.as_cwd():
-        result = runner.invoke(main, ["--site=3339000", "--start_date=2020-01-01", "--end_date=2020-01-02",
+        result = runner.invoke(main, ["--site=03339000", "--start_date=2020-01-01", "--end_date=2020-01-02",
                                       "--data_type=error", "demo.nc"])
         assert result.exit_code != 0
 
-        result = runner.invoke(main, ["--site=3339000", "--start_date=2020-01-01", "--end_date=2020-01-02",
+        result = runner.invoke(main, ["--site=03339000", "--start_date=2020-01-01", "--end_date=2020-01-02",
                                       "--data_type=iv", "demo.nc"])
         assert result.exit_code == 0
         
