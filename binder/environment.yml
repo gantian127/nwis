@@ -8,8 +8,8 @@ dependencies:
   - pyyaml
   - xarray
   - matplotlib
+  - cftime
   - pip
   - pip:
-    - cftime==1.1.0
     - dataretrieval
 
