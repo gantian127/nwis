@@ -28,7 +28,7 @@ You can launch binder to test and run the code below.
 import matplotlib.pyplot as plt
 from nwis import Nwis
 
-# get data from National water model HydroShare App
+# get data from NWIS
 nwis_data = Nwis()
 dataset = nwis_data.get_data(site='03339000', start_date='2020-01-01', end_date='2020-01-15', data_type='dv')
 

@@ -36,7 +36,7 @@ You can launch binder to test and run the code below. |binder|
    import matplotlib.pyplot as plt
    from nwis import Nwis
 
-   # get data from National water model HydroShare App
+   # get data from NWIS
    nwis_data = Nwis()
    dataset = nwis_data.get_data(site='03339000', start_date='2020-01-01', end_date='2020-01-15', data_type='dv')
 
@@ -118,7 +118,7 @@ Parameter settings
 * **data_type**: The configuration of the forecast. Options include 'dv'- daily value and
  'iv'- instantaneous value.
 
-* **output**: The file path of the NetCDF file to store the downloaded data.
+* **nc_output**: The file path of the NetCDF file to store the downloaded data.
 
 "get_data()" method can download the following variables if the time series data are available for the
 given USGS site number.
