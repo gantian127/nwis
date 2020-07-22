@@ -9,6 +9,7 @@ dependencies:
   - xarray
   - matplotlib
   - cftime
+  - requests
   - pip
   - pip:
     - dataretrieval

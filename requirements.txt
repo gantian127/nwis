@@ -6,3 +6,4 @@ xarray
 dataretrieval
 cftime
 pandas
+requests
