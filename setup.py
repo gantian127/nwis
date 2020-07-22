@@ -15,16 +15,6 @@ setup(
     long_description_content_type='text/markdown',
     url="http://csdms.colorado.edu",
     packages=find_packages(exclude=("tests*",)),
-    install_requires=[
-        "bmipy",
-        "click",
-        "numpy",
-        "pyyaml",
-        "xarray",
-        "cftime",
-        "pandas",
-        "dataretrieval"
-    ],
-
+    install_requires=open("requirements.txt", "r").read().splitlines(),
     entry_points={"console_scripts": ["nwis=nwis.cli:main"]},
 )
