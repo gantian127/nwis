@@ -1,0 +1,8 @@
+bmipy
+click
+numpy
+pyyaml
+xarray
+dataretrieval
+cftime
+pandas

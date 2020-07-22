@@ -1,0 +1,15 @@
+name: nwis
+channels:
+  - conda-forge
+dependencies:
+  - bmipy
+  - click
+  - numpy
+  - pyyaml
+  - xarray
+  - matplotlib
+  - pip
+  - pip:
+    - cftime==1.1.0
+    - dataretrieval
+
