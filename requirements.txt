@@ -7,3 +7,4 @@ dataretrieval
 cftime
 pandas
 requests
+netcdf4
