@@ -15,14 +15,14 @@ If you have any suggestion to improve the current function, please create a gith
 
 #### Install package
 
-**Stable Release**
+##### Stable Release
 
 The nwis package and its dependencies can be installed with pip.
 ```
 $ pip install nwis
 ```
 
-**From Source**
+##### From Source
 
 After downloading the source code, run the following command from top-level folder 
 (the one that contains setup.py) to install nwis.
