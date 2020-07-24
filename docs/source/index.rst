@@ -19,9 +19,23 @@ Getting Started
 Installation
 ++++++++++++
 
+**Stable Release**
+
+The nwis package and its dependencies can be installed with pip.
+
 .. code-block:: console
 
     $ pip install nwis
+
+**From Source**
+
+After downloading the `source code <https://github.com/gantian127/nwis>`_, run the following command from top-level
+folder (the one that contains setup.py) to install nwis.
+
+.. code-block:: console
+
+    $ pip install -e .
+
 
 
 Download NWIS Data
@@ -115,8 +129,7 @@ Parameter settings
 
 * **end_date**: The end date of of the time series data. A string of the form "YYYY-MM-DD".
 
-* **data_type**: The configuration of the forecast. Options include 'dv'- daily value and
- 'iv'- instantaneous value.
+* **data_type**: The configuration of the forecast. Options include 'dv'- daily value and 'iv'- instantaneous value.
 
 * **nc_output**: The file path of the NetCDF file to store the downloaded data.
 
