@@ -1,6 +1,7 @@
-site: 03339000
-start_date: '2020-01-01'
-end_date: '2020-01-15'
-data_type: dv
-nc_output: demo.nc
+bmi-nwis:
+  site: 03339000
+  start_date: '2020-01-01'
+  end_date: '2020-01-15'
+  data_type: dv
+  nc_output: demo.nc
 
