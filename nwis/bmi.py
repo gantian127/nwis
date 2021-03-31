@@ -16,10 +16,16 @@ BmiVar = namedtuple(
 )
 BmiGridPoints = namedtuple(
     "BmiGridPoints", ["shape"]
-)  # TODO: what needs to be included for point?
+)
 
 
 class BmiNwis(Bmi):
+    def __init__(self) -> None:
+        self._input_var_names = ()
+        self._output_var_names = ()
+        self._var = {}
+        self._data = None
+
     def finalize(self) -> None:
         """Perform tear-down tasks for the model.
         Perform all tasks that take place after exiting the model's time
@@ -27,6 +33,12 @@ class BmiNwis(Bmi):
         printing reports.
         """
         self._time_index = 0
+        self._cftime_array = None
+        self._cftime_unit = None
+        self._var = {}
+        self._input_var_names = {}
+        self._output_var_names = {}
+        self._data = None
 
     def get_component_name(self) -> str:
         """Name of the component.
@@ -325,7 +337,7 @@ class BmiNwis(Bmi):
         int
           The number of input variables.
         """
-        return 0
+        return len(self._input_var_names)
 
     def get_output_var_names(self) -> Tuple[str]:
         """List of a model's output variables.
@@ -399,6 +411,7 @@ class BmiNwis(Bmi):
         # return all the value at current time step, for scalar it is just one value
 
         dest[:] = self._data[self._var_names_mapping[name]].values[self._time_index]
+        return dest
 
     def get_value_at_indices(
         self, name: str, dest: numpy.ndarray, inds: numpy.ndarray
@@ -419,6 +432,7 @@ class BmiNwis(Bmi):
         """
         # return the value at current time step with given index in 1D or 2D grid.
         dest[:] = self._data[self._var_names_mapping[name]].values[self._time_index]
+        return dest
 
     def get_value_ptr(self, name: str) -> numpy.ndarray:
         """Get a reference to values of the given variable.
@@ -565,7 +579,7 @@ class BmiNwis(Bmi):
         """
         if config_file:
             with open(config_file, "r") as fp:
-                conf = yaml.safe_load(fp)
+                conf = yaml.safe_load(fp).get("bmi-nwis", {})
         else:
             conf = {'site': '03339000', 'start_date': '2020-01-01', 'end_date': '2020-01-04'}
 
@@ -574,7 +588,6 @@ class BmiNwis(Bmi):
         self._var_names_mapping = dict(zip([self._data[var].variable_name for var in self._data.data_vars.variables],
                                        self._data.data_vars.variables))  # dict for variable name and variable code
         self._output_var_names = tuple(self._var_names_mapping.keys())  # TODO: use CSDMS standard names
-        self._input_var_names = ()
 
         self._time_index = 0
         time_array = pd.to_datetime(numpy.datetime_as_string(self._data['datetime'])).to_pydatetime()
