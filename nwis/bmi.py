@@ -579,9 +579,9 @@ class BmiNwis(Bmi):
         """
         if config_file:
             with open(config_file, "r") as fp:
-                conf = yaml.safe_load(fp).get("bmi-nwis", {})
+                conf = yaml.load(fp, Loader=yaml.BaseLoader).get("bmi-nwis", {})
         else:
-            conf = {'site': '03339000', 'start_date': '2020-01-01', 'end_date': '2020-01-04'}
+            conf = {'site': '03339000', 'start_date': '2020-01-01', 'end_date': '2020-01-04', 'nc_output': 'demo.nc'}
 
         self._data = Nwis().get_data(**conf)
 
