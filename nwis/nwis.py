@@ -102,7 +102,11 @@ class Nwis:
 
             # convert to xarray
             nwis_data = nwis_df.to_xarray()  # in the array, the row is site number, column is time step
-            nwis_data.coords['datetime'] = nwis_df.index.levels[nwis_df.index.names.index('datetime')].values
+
+            if nwis_df.index.nlevels == 1:
+                nwis_data.coords['datetime'] = nwis_df.index.values
+            else:
+                nwis_data.coords['datetime'] = nwis_df.index.levels[nwis_df.index.names.index('datetime')].values
 
             # save output file as csv file
             if output:
