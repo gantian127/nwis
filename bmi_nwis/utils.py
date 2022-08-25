@@ -88,7 +88,7 @@ class Nwis:
                 self._site_info = site_info
 
             # get variable info
-            parameterCd = list(set([name.split('_')[0] for name in ts_df.columns if name.split('_')[0].isnumeric()]))  # parameterCd = ['00060','00095']
+            parameterCd = list(set([name.split('_')[0] for name in ts_df.columns if name.split('_')[0].isnumeric()]))
             variable_info = Nwis._get_variable_info(parameterCd)
             if not variable_info:
                 print('Failed to get the variable information.')
@@ -96,7 +96,7 @@ class Nwis:
             else:
                 self._variable_info = variable_info
 
-            # get time series data frame
+            # refine dataframe
             filter_names = []
             for code in parameterCd:
                 for pattern in ['', '_Mean', '_hach', '_hach_Mean']:
