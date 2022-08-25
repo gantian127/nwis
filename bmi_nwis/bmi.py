@@ -14,9 +14,6 @@ from nwis import Nwis
 BmiVar = namedtuple(
     "BmiVar", ["dtype", "itemsize", "nbytes", "units", "location", "grid"]
 )
-BmiGridPoints = namedtuple(
-    "BmiGridPoints", ["shape"]
-)
 
 
 class BmiNwis(Bmi):
@@ -160,7 +157,7 @@ class BmiNwis(Bmi):
             The total number of grid nodes.
         """
 
-        return len(self._grid_x)  # TODO: double check with multiple nodes
+        return len(self._grid_x) 
 
     def get_grid_nodes_per_face(
         self, grid: int, nodes_per_face: numpy.ndarray
@@ -279,7 +276,7 @@ class BmiNwis(Bmi):
         ndarray of float
             The input numpy array that holds the grid's column x-coordinates.
         """
-        return self._grid_x  # TODO: does this apply for multi points?
+        return self._grid_x
 
     def get_grid_y(self, grid: int, y: numpy.ndarray) -> numpy.ndarray:
         """Get coordinates of grid nodes in the y direction.
@@ -294,7 +291,7 @@ class BmiNwis(Bmi):
         ndarray of float
             The input numpy array that holds the grid's row y-coordinates.
         """
-        return self._grid_y # TODO: does this apply for multi points?
+        return self._grid_y
 
     def get_grid_z(self, grid: int, z: numpy.ndarray) -> numpy.ndarray:
         """Get coordinates of grid nodes in the z direction.
@@ -587,7 +584,7 @@ class BmiNwis(Bmi):
 
         # get time series data
         nwis_obj = Nwis()
-        self._data = Nwis().get_data(**conf)
+        self._data = nwis_obj.get_data(**conf)
 
         # get variable names
         self._var_names_mapping = dict(zip([nwis_obj.variables[var_cd][0] for var_cd in self._data.data_vars.variables],
@@ -597,7 +594,7 @@ class BmiNwis(Bmi):
 
         # get time info
         # convert the datetime64 type to datetime.datetime type, otherwise cftime function has error
-        time_array = pd.to_datetime(numpy.datetime_as_string(self._data['datetime'].values)).to_pydatetime()
+        time_array = pd.to_datetime(numpy.datetime_as_string(self._data['datetime'].values), utc=True).to_pydatetime()
         self._cftime_unit = 'seconds since 1970-01-01 00:00:00 UTC'
         self._cftime_array = cftime.date2num(time_array, self._cftime_unit, calendar='standard')
         self._time_index = 0
@@ -608,9 +605,12 @@ class BmiNwis(Bmi):
             self._time_step = 0
 
         # get grid info
-        self._grid_x = [nwis_obj.sites[site_no]['site_lon'] for site_no in self._data['site_no'].values]
-        self._grid_y = [nwis_obj.sites[site_no]['site_lat'] for site_no in self._data['site_no'].values]
-        self._grid = {0: BmiGridPoints(shape=[1, 1])}  # TODO check with the shape when it is multiple points
+        if len(nwis_obj.sites) == 1:
+            self._grid_x = list(nwis_obj.sites.values())[0]['site_lon']
+            self._grid_y = list(nwis_obj.sites.values())[0]['site_lat']
+        elif len(nwis_obj.sites) > 1:
+            self._grid_x = [nwis_obj.sites[site_no]['site_lon'] for site_no in self._data['site_no'].values]
+            self._grid_y = [nwis_obj.sites[site_no]['site_lat'] for site_no in self._data['site_no'].values]
 
         # get variable info
         self._var = {}
