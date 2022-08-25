@@ -160,7 +160,7 @@ class BmiNwis(Bmi):
             The total number of grid nodes.
         """
 
-        return 1
+        return len(self._grid_x)  # TODO: double check with multiple nodes
 
     def get_grid_nodes_per_face(
         self, grid: int, nodes_per_face: numpy.ndarray
@@ -279,7 +279,7 @@ class BmiNwis(Bmi):
         ndarray of float
             The input numpy array that holds the grid's column x-coordinates.
         """
-        return self._grid_x
+        return self._grid_x  # TODO: does this apply for multi points?
 
     def get_grid_y(self, grid: int, y: numpy.ndarray) -> numpy.ndarray:
         """Get coordinates of grid nodes in the y direction.
@@ -294,7 +294,7 @@ class BmiNwis(Bmi):
         ndarray of float
             The input numpy array that holds the grid's row y-coordinates.
         """
-        return self._grid_y
+        return self._grid_y # TODO: does this apply for multi points?
 
     def get_grid_z(self, grid: int, z: numpy.ndarray) -> numpy.ndarray:
         """Get coordinates of grid nodes in the z direction.
@@ -431,7 +431,7 @@ class BmiNwis(Bmi):
             Value of the model variable at the given location.
         """
         # return the value at current time step with given index in 1D or 2D grid.
-        dest[:] = self._data[self._var_names_mapping[name]].values[self._time_index]
+        dest[:] = self.get_value_ptr(name).reshape(-1)[inds]
         return dest
 
     def get_value_ptr(self, name: str) -> numpy.ndarray:
@@ -449,7 +449,7 @@ class BmiNwis(Bmi):
             A reference to a model variable.
         """
         # return a reference of all the value at current time step. mainly for input data. not useful for scalar value
-        return self._data[self._var_names_mapping[name]].values[self._time_index]
+        return self._data[self._var_names_mapping[name]].values[:, self._time_index]
 
     def get_var_grid(self, name: str) -> int:
         """Get grid identifier for the given variable.
@@ -577,41 +577,52 @@ class BmiNwis(Bmi):
         recommended. A template of a model's configuration file
         with placeholder values is used by the BMI.
         """
+
+        # parse config file
         if config_file:
             with open(config_file, "r") as fp:
                 conf = yaml.load(fp, Loader=yaml.BaseLoader).get("bmi-nwis", {})
         else:
-            conf = {'site': '03339000', 'start_date': '2020-01-01', 'end_date': '2020-01-04', 'nc_output': 'demo.nc'}
+            conf = {'sites': '03339000', 'service': 'iv', 'start': '2022-01-01', 'end': '2022-01-03', 'output': 'demo.nc'}
 
+        # get time series data
+        nwis_obj = Nwis()
         self._data = Nwis().get_data(**conf)
 
-        self._var_names_mapping = dict(zip([self._data[var].variable_name for var in self._data.data_vars.variables],
-                                       self._data.data_vars.variables))  # dict for variable name and variable code
+        # get variable names
+        self._var_names_mapping = dict(zip([nwis_obj.variables[var_cd][0] for var_cd in self._data.data_vars.variables],
+                                       self._data.data_vars.variables))  # dict for variable full name and variable code
+
         self._output_var_names = tuple(self._var_names_mapping.keys())  # TODO: use CSDMS standard names
 
-        self._time_index = 0
-        time_array = pd.to_datetime(numpy.datetime_as_string(self._data['datetime'])).to_pydatetime()
+        # get time info
+        # convert the datetime64 type to datetime.datetime type, otherwise cftime function has error
+        time_array = pd.to_datetime(numpy.datetime_as_string(self._data['datetime'].values)).to_pydatetime()
         self._cftime_unit = 'seconds since 1970-01-01 00:00:00 UTC'
-        self._cftime_array = cftime.date2num(time_array, self._cftime_unit)
+        self._cftime_array = cftime.date2num(time_array, self._cftime_unit, calendar='standard')
+        self._time_index = 0
+
         if len(self._cftime_array) > 1:
             self._time_step = self._cftime_array[1] - self._cftime_array[0]
         else:
             self._time_step = 0
 
-        self._grid_x = numpy.array(self._data.attrs['site_longitude'])
-        self._grid_y = numpy.array(self._data.attrs['site_latitude'])
+        # get grid info
+        self._grid_x = [nwis_obj.sites[site_no]['site_lon'] for site_no in self._data['site_no'].values]
+        self._grid_y = [nwis_obj.sites[site_no]['site_lat'] for site_no in self._data['site_no'].values]
+        self._grid = {0: BmiGridPoints(shape=[1, 1])}  # TODO check with the shape when it is multiple points
 
-        self._grid = {0: BmiGridPoints(shape=[1, 1])}
-
+        # get variable info
         self._var = {}
         for var in self._data.data_vars.variables:
-            array = self._data[var].values
-            var_name = self._data[var].variable_name
+            array = self._data[var].values  # array: row is site number, column is time step
+            var_name = nwis_obj.variables[var][0]
+
             self._var[var_name] = BmiVar(
                 dtype=str(array.dtype),
                 itemsize=array.itemsize,
-                nbytes=array[self._time_index].nbytes,  # nbytes for current time step value, not the whole time series
-                units=self._data[var].variable_unit,
+                nbytes=array[..., self._time_index].nbytes,  # nbytes for current time step value, not the whole time series
+                units=nwis_obj.variables[var][1],
                 location="node",  # for point it is "node" type. location options on a grid (node, face, edge)
                 grid=0,  # grid id for variable grid type. check id from self._grid
             )
