@@ -1,7 +1,5 @@
 # nwis
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/nwis/blob/master/LICENSE.txt)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gantian127/nwis/master?filepath=notebooks%2Fnwis.ipynb)
-
 
 
 Python library to fetch and process the National Water Information System (NWIS) time series datasets. 
