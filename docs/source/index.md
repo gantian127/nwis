@@ -62,9 +62,7 @@ for var_name in dataset.data_vars:
 
 # plot discharge data
 dataset["00060"].plot(figsize=(12, 7))
-plt.ylabel(
-    "{} ({})".format(dataset["00060"].variable_name, dataset["00060"].variable_unit)
-)
+plt.ylabel(f"{dataset["00060"].variable_name} ({dataset["00060"].variable_unit})")
 plt.title("Discharge Observation at USGS Gage 03339000")
 ```
 
@@ -88,7 +86,8 @@ data_comp.initialize("config_file.yaml")
 # get variable info
 for var_name in data_comp.get_output_var_names():
     var_unit = data_comp.get_var_units(var_name)
-    print(" variable_name: {}\n var_unit: {}\n".format(var_name, var_unit))
+    print(f" variable_name: {var_name!r})
+    print(f" variable_unit: {var_unit!r})
 
 # get time info
 start_time = data_comp.get_start_time()
@@ -96,11 +95,12 @@ end_time = data_comp.get_end_time()
 time_step = data_comp.get_time_step()
 time_unit = data_comp.get_time_units()
 time_steps = int((end_time - start_time) / time_step) + 1
-print(
-    " start_time:{}\n end_time:{}\n time_step:{}\n time_unit:{}\n time_steps:{}\n".format(
-        start_time, end_time, time_step, time_unit, time_steps
-    )
-)
+
+print(f" {start_time=}")
+print(f" {end_time=}")
+print(f" {time_step=}")
+print(f" {time_unit=}")
+print(f" {time_steps=}")
 
 # initiate numpy arrays to store discharge data
 discharge_value = np.empty(1)
@@ -123,7 +123,7 @@ time_array = cftime.num2date(
 # plot discharge data
 plt.figure(figsize=(9, 5))
 plt.plot(time_array, discharge_array)
-plt.ylabel("{} ({})".format("discharge", "cubic feet per second"))
+plt.ylabel("discharge (cubic feet per second)")
 plt.title("Discharge Observation at USGS Gage 03339000")
 ```
 
