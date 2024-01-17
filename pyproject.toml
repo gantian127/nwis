@@ -1,0 +1,105 @@
+[project]
+name = "nwis"
+requires-python = ">=3.10"
+description = "Fetch and process data from the National Water Information System https://waterdata.usgs.gov/nwis?",
+keywords = [
+    "BMI",
+    "Basic Model Interface",
+    "nwis",
+]
+authors = [
+    { name = "Tian Gan", email = "jamy127@foxmail.com" },
+]
+maintainers = [
+    { name = "Tian Gan", email = "jamy127@foxmail.com" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Hydrology",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+	"bmipy",
+	"click",
+	"numpy",
+	"pyyaml",
+	"xarray",
+	"dataretrieval",
+	"cftime",
+	"pandas",
+	"requests",
+	"netcdf4",
+]
+dynamic = [
+    "version",
+    "readme",
+]
+
+[project.license]
+text = "MIT"
+
+[project.scripts]
+nwis = "nwis.cli:main"
+
+[project.urls]
+documentation = "https://github.com/gantian127/nwis"
+homepage = "https://github.com/gantian127/nwis"
+repository = "https://github.com/gantian127/nwis"
+
+[project.optional-dependencies]
+dev = [
+    "nox",
+]
+
+[build-system]
+requires = [
+    "setuptools >=61",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[tool.setuptools.dynamic.version]
+attr = "nwis._version.__version__"
+
+[tool.setuptools.packages.find]
+where = [
+    "src",
+]
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "src/nwis",
+    "tests",
+]
+norecursedirs = [
+    ".*",
+    "*.egg*",
+    "build",
+    "dist",
+]
+addopts = [
+    "--tb=native",
+    "--durations=16",
+    "--strict-markers",
+    "--doctest-modules",
+    "-vvv",
+]
+
+[tool.zest-releaser]
+tag-format = "v{version}"
+python-file-with-version = "src/nwis/_version.py"
