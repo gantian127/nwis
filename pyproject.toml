@@ -58,6 +58,15 @@ repository = "https://github.com/gantian127/nwis"
 dev = [
     "nox",
 ]
+notebooks = [
+    "jupyter",
+    "matplotlib",
+]
+testing = [
+    "nbmake",
+    "pytest",
+    "pytest-cov",
+]
 
 [build-system]
 requires = [
