@@ -7,7 +7,7 @@ import numpy
 import pandas as pd
 import yaml
 from bmipy import Bmi
-from nwis import Nwis
+from nwis.nwis import Nwis
 
 BmiVar = namedtuple(
     "BmiVar", ["dtype", "itemsize", "nbytes", "units", "location", "grid"]

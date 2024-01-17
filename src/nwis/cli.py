@@ -3,9 +3,8 @@ from __future__ import annotations
 import os
 
 import click
-from nwis import Nwis
-
 from nwis._version import __version__
+from nwis.nwis import Nwis
 
 
 @click.command()
