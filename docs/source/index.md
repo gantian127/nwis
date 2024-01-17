@@ -109,7 +109,7 @@ cftime_array = np.empty(time_steps)
 
 for i in range(0, time_steps):
     data_comp.get_value("discharge", discharge_value)
-    discharge_array[i] = discharge_value
+    discharge_array[i] = discharge_value[0]
     cftime_array[i] = data_comp.get_current_time()
     data_comp.update()
 
