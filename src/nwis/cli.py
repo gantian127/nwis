@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import os
+
 import click
+from nwis import Nwis
 
 from . import __version__
-from nwis import Nwis
 
 
 @click.command()
@@ -27,11 +30,14 @@ from nwis import Nwis
     default="iv",
     help="Data type of the time series. Daily value ('dv') or Instantaneous value ('iv')",
 )
-@click.argument(
-    'output',
-    type=click.Path(exists=False)
-)
+@click.argument("output", type=click.Path(exists=False))
 def main(site, start_date, end_date, data_type, output):
-    Nwis().get_data(site=site, start_date=start_date, end_date=end_date, data_type=data_type, nc_output=output)
+    Nwis().get_data(
+        site=site,
+        start_date=start_date,
+        end_date=end_date,
+        data_type=data_type,
+        nc_output=output,
+    )
     if os.path.isfile(output):
-        print('Done')
+        print("Done")

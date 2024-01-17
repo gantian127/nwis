@@ -4,4 +4,3 @@ bmi-nwis:
   end_date: '2020-01-15'
   data_type: dv
   nc_output: demo.nc
-
