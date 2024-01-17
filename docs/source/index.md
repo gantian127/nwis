@@ -62,7 +62,7 @@ for var_name in dataset.data_vars:
 
 # plot discharge data
 dataset["00060"].plot(figsize=(12, 7))
-plt.ylabel(f"{dataset["00060"].variable_name} ({dataset["00060"].variable_unit})")
+plt.ylabel(f"{dataset['00060'].variable_name} ({dataset['00060'].variable_unit})")
 plt.title("Discharge Observation at USGS Gage 03339000")
 ```
 
@@ -86,8 +86,8 @@ data_comp.initialize("config_file.yaml")
 # get variable info
 for var_name in data_comp.get_output_var_names():
     var_unit = data_comp.get_var_units(var_name)
-    print(f" variable_name: {var_name!r})
-    print(f" variable_unit: {var_unit!r})
+    print(f" variable_name: {var_name!r}")
+    print(f" variable_unit: {var_unit!r}")
 
 # get time info
 start_time = data_comp.get_start_time()
