@@ -1,10 +1,10 @@
 bmipy
-click
-numpy
-pyyaml
-xarray
-dataretrieval
 cftime
-pandas
-requests
+click
+dataretrieval
 netcdf4
+numpy
+pandas
+pyyaml
+requests
+xarray
