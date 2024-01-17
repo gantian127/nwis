@@ -1,7 +1,7 @@
 [project]
 name = "nwis"
 requires-python = ">=3.10"
-description = "Fetch and process data from the National Water Information System https://waterdata.usgs.gov/nwis?",
+description = "Fetch and process data from the National Water Information System https://waterdata.usgs.gov/nwis?"
 keywords = [
     "BMI",
     "Basic Model Interface",
@@ -27,16 +27,16 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
-	"bmipy",
-	"click",
-	"numpy",
-	"pyyaml",
-	"xarray",
-	"dataretrieval",
-	"cftime",
-	"pandas",
-	"requests",
-	"netcdf4",
+    "bmipy",
+    "cftime",
+    "click",
+    "dataretrieval",
+    "netcdf4",
+    "numpy",
+    "pandas",
+    "pyyaml",
+    "requests",
+    "xarray",
 ]
 dynamic = [
     "version",
