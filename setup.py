@@ -1,13 +1,11 @@
 from setuptools import setup, find_packages
-import versioneer
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name="nwis",
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(),
+    version="0.1.1",
     author="Tian Gan",
     author_email="jamy127@foxmail.com",
     description="Fetch and process data from the National Water Information System https://waterdata.usgs.gov/nwis?",

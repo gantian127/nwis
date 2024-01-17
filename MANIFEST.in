@@ -1,2 +1,0 @@
-include versioneer.py
-include nwis/_version.py
