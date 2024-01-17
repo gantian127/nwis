@@ -5,7 +5,7 @@ import os
 import click
 from nwis import Nwis
 
-from . import __version__
+from nwis._version import __version__
 
 
 @click.command()
